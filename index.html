@@ -654,13 +654,24 @@ function sendToSheets() {
   statusEl.textContent = "Connecting to Google Sheets...";
 
   fetch(SCRIPT_URL, {
-    method:  "POST",
-    headers: {"Content-Type":"text/plain"},
-    body:    JSON.stringify(payload)
+    method: "POST",
+    mode:   "no-cors",
+    body:   JSON.stringify(payload)
   })
-  .then(function(res) {
-    return res.json();
+  .then(function() {
+    btn.disabled = false;
+    btn.textContent = "Send to Google Sheets";
+    btn.style.background = "var(--navy)";
+    statusEl.style.color = "var(--green)";
+    statusEl.textContent = "✓ Data sent! Open your Google Sheet and check the Weekly Log tab.";
   })
+  .catch(function(err){
+    btn.disabled = false;
+    btn.textContent = "Send to Google Sheets";
+    btn.style.background = "var(--navy)";
+    statusEl.style.color = "var(--red)";
+    statusEl.textContent = "✖ Network error: " + err.message + ". Check your internet connection.";
+  });
   .then(function(data) {
     btn.disabled = false;
     btn.style.background = "var(--navy)";
